@@ -25,7 +25,6 @@ const typedTextElement = document.getElementById("typed-text");
 let wordIndex = 0;
 let charIndex = 0;
 let isDeleting = false;
-let typingSpeed = 90; // Faster overall typing speed
 
 // Words that require Right-to-Left text and cursor adjustments
 const rtlWords = ["القرابة", "خویشاوند", "قרוב"];
@@ -40,16 +39,18 @@ function typeWriter() {
         middleLineElement.classList.remove("rtl");
     }
 
+    let typingSpeed = 35; // Fast base speed to fit 5 seconds
+
     if (isDeleting) {
-        // Delete a character
+        // Delete a character (faster than typing)
         typedTextElement.textContent = currentWord.substring(0, charIndex - 1);
         charIndex--;
-        typingSpeed = 40; // Faster deleting speed
+        typingSpeed = 15; 
     } else {
         // Type a character
         typedTextElement.textContent = currentWord.substring(0, charIndex + 1);
         charIndex++;
-        typingSpeed = 85; // Faster typing speed
+        typingSpeed = 30; 
     }
 
     // Finished typing the current word
@@ -58,22 +59,21 @@ function typeWriter() {
         if (wordIndex === words.length - 1) {
             return; 
         }
-        // Shorter pauses on words
-        typingSpeed = currentWord === "Kindred" ? 1400 : 1000;
+        // Very brief pauses so it fits the 5-second total timeline
+        typingSpeed = 120;
         isDeleting = true;
     } 
     // Finished deleting the word completely
     else if (isDeleting && charIndex === 0) {
         isDeleting = false;
-        // Move to the next word sequentially (without looping back to the start)
         wordIndex++;
-        typingSpeed = 250; // Faster brief pause before next word starts
+        typingSpeed = 50; 
     }
 
     setTimeout(typeWriter, typingSpeed);
 }
 
-// Initialize animation when page loads
+// Initialize animation quickly when page loads
 document.addEventListener("DOMContentLoaded", () => {
-    setTimeout(typeWriter, 400); // Faster initial start delay
+    setTimeout(typeWriter, 100);
 });
